@@ -5,6 +5,7 @@ import numpy as np
 import scipy.stats as stats
 import yaml
 from sklearn.metrics import mean_squared_error
+from sklearn.linear_model import LinearRegression
 
 from boa.utils import get_dictionary_from_callable
 
@@ -77,3 +78,30 @@ def normalized_root_mean_squared_error(y_true, y_pred, normalizer="iqr", **kwarg
 
     nrmse = rmse / norm
     return nrmse
+
+def regress_slope(y_true, y_pred):
+    """Normalized root mean squared error
+
+    Parameters
+    ----------
+    y_true : array-like of shape (n_samples,) or (n_samples, n_outputs)
+        Ground truth (correct) target values.
+
+    y_pred : array-like of shape (n_samples,) or (n_samples, n_outputs)
+        Estimated target values.
+
+    Returns
+    -------
+    nrmse : float or ndarray of floats
+        A normalized version of RMSE
+    """
+
+    y_true = y_true.values.reshape(-1, 1)
+    y_pred = y_pred.values.reshape(-1, 1)
+
+    reg = LinearRegression().fit(y_true,y_pred)
+    reg_coef = reg.coef_
+    reg_slp = abs(1-reg_coef[0])
+
+    return reg_slp
+

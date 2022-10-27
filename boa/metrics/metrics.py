@@ -32,6 +32,7 @@ from boa.metaclasses import MetricRegister, MetricToEvalRegister
 from boa.metrics.metric_funcs import metric_from_json, metric_from_yaml
 from boa.metrics.metric_funcs import (
     normalized_root_mean_squared_error as normalized_root_mean_squared_error_,
+    regress_slope as regress_slope_,
 )
 from boa.utils import get_dictionary_from_callable, serialize_init_args
 from boa.wrapper import BaseWrapper
@@ -328,3 +329,11 @@ NRMSE = partial(
 )
 NormalizedRootMeanSquaredError = NRMSE
 normalized_root_mean_squared_error = NRMSE
+
+RegSlp = partial(
+    ModularMetric, metric_to_eval=regress_slope_, lower_is_better=True
+)
+LinearRegressionSlope = RegSlp
+regress_slope = RegSlp
+
+
